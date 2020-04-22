@@ -1,0 +1,58 @@
+---
+- name: set auth api key if env var is set
+  set_fact:
+    k8s_auth_api_key: "{{ ansible_env.K8S_AUTH_API_KEY }}"
+  when: K8S_AUTH_API_KEY in ansible_env and k8s_auth_api_key == ""
+
+- name: Log in (obtain access token)
+  k8s_auth:
+    host: "{{ k8s_auth_host }}"
+    validate_certs: False
+    username: "{{ k8s_username }}"
+    password: "{{ k8s_password }}"
+  register: k8s_auth_results
+  when: k8s_username != "" and k8s_password != ""
+
+- name: set auth api key if username/password is provided
+  set_fact:
+    k8s_auth_api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
+  when: k8s_auth_results.k8s_auth is defined
+
+- name: "Create openshift project {{ openshift_project }}"
+  k8s:
+    host: "{{ k8s_auth_host }}"
+    api_key: "{{ k8s_auth_api_key }}"
+    name: "{{ openshift_project }}"
+    api_version: v1
+    kind: Project
+    state: "{{ k8s_state }}"
+    validate_certs: false
+  when: create_project
+
+- name: Find all object files
+  find:
+    paths: "{{ k8s_resource_dirs | join(',') }}"
+    patterns: '*.yml,*.yaml'
+    recurse: yes
+  register: oc_templates
+
+- name: set k8s_resources with found files
+  set_fact:
+    k8s_resources: "{{ k8s_resources }} + [ '{{ item.path }}' ]"
+  with_items: "{{ oc_templates.files }}"
+
+- name: set k8s_resources with set files
+  set_fact:
+    k8s_resources: "{{ k8s_resources }} + [ '{{ item }}' ]"
+  with_items: "{{ k8s_resource_files }}"
+
+- name: Creating k8s objects
+  k8s:
+    host: "{{ k8s_auth_host }}"
+    api_key: "{{ k8s_auth_api_key }}"
+    namespace: "{{ openshift_project }}"
+    state: "{{ k8s_state }}"
+    validate_certs: false
+    definition: "{{ lookup('template', item) }}"
+  with_items: "{{ k8s_resources }}"
+

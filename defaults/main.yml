@@ -1,0 +1,16 @@
+# kubernetes api server url
+k8s_auth_host: ""
+# credentials to login. ONLY used if not providing k8s_auth_api_key
+k8s_username: ""
+k8s_password: ""
+k8s_auth_api_key: ""
+# A list of resource objects on the filesystem
+k8s_resource_files: []
+# the openshift project to create and apply the resources to
+openshift_project: ""
+k8s_state: present
+k8s_resource_dirs: []
+
+k8s_resources: []
+create_project: true
+
