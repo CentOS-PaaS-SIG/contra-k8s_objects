@@ -1,9 +1,4 @@
 ---
-- name: set auth api key if env var is set
-  set_fact:
-    k8s_auth_api_key: "{{ ansible_env.K8S_AUTH_API_KEY }}"
-  when: K8S_AUTH_API_KEY in ansible_env and k8s_auth_api_key == ""
-
 - name: Log in (obtain access token)
   k8s_auth:
     host: "{{ k8s_auth_host }}"
@@ -11,7 +6,7 @@
     username: "{{ k8s_username }}"
     password: "{{ k8s_password }}"
   register: k8s_auth_results
-  when: k8s_username != "" and k8s_password != ""
+  when: k8s_username != ""
 
 - name: set auth api key if username/password is provided
   set_fact:
