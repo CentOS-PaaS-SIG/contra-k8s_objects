@@ -1,6 +1,6 @@
 ---
 - name: Install prereqs
-  import_task: prereqs.yml
+  import_tasks: prereqs.yml
   when: run_prereqs == true
 
 - name: Log in (obtain access token)
@@ -27,6 +27,7 @@
     kind: Project
     state: "{{ k8s_state }}"
     validate_certs: False
+    verify_ssl: false
   when: create_project
 
 - name: Find all object files
@@ -53,6 +54,7 @@
     namespace: "{{ openshift_project }}"
     state: "{{ k8s_state }}"
     validate_certs: False
+    verify_ssl: false
     definition: "{{ lookup('template', item) }}"
   with_items: "{{ k8s_resources }}"
 
