@@ -7,7 +7,6 @@
   k8s_auth:
     host: "{{ k8s_auth_host }}"
     validate_certs: False
-    verify_ssl: false
     username: "{{ k8s_username }}"
     password: "{{ k8s_password }}"
   register: k8s_auth_results
@@ -27,7 +26,6 @@
     kind: Project
     state: "{{ k8s_state }}"
     validate_certs: False
-    verify_ssl: false
   when: create_project
 
 - name: Find all object files
@@ -54,7 +52,6 @@
     namespace: "{{ openshift_project }}"
     state: "{{ k8s_state }}"
     validate_certs: False
-    verify_ssl: false
     definition: "{{ lookup('template', item) }}"
   with_items: "{{ k8s_resources }}"
 
