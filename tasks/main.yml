@@ -32,7 +32,7 @@
   find:
     paths: "{{ k8s_resource_dirs | join(',') }}"
     patterns: '*.yml,*.yaml'
-    recurse: yes
+    recurse: no
   register: oc_templates
 
 - name: set k8s_resources with found files

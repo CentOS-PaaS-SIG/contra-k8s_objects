@@ -6,5 +6,6 @@
   with_items:
     - python3-kubernetes
     - python3-openshift
+    - python3-requests-oauthlib
   become: true
 
