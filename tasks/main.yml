@@ -26,6 +26,8 @@
     kind: Project
     state: "{{ k8s_state }}"
     validate_certs: False
+  delay: 5
+  retries: 120
   when: create_project
 
 - name: Find all object files
