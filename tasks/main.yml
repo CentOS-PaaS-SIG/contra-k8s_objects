@@ -27,7 +27,7 @@
     state: "{{ k8s_state }}"
     validate_certs: False
   register: result
-  until: result.rc == 0
+  until: result.failed == false
   delay: 5
   retries: 120
   when: create_project
