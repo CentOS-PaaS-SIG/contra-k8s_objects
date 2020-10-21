@@ -32,22 +32,9 @@
   retries: 120
   when: create_project
 
-- name: Find all object files
-  find:
-    paths: "{{ k8s_resource_dirs | join(',') }}"
-    patterns: '*.yml,*.yaml'
-    recurse: no
-  register: oc_templates
-
-- name: set k8s_resources with found files
-  set_fact:
-    k8s_resources: "{{ k8s_resources }} + [ '{{ item.path }}' ]"
-  with_items: "{{ oc_templates.files }}"
-
-- name: set k8s_resources with set files
-  set_fact:
-    k8s_resources: "{{ k8s_resources }} + [ '{{ item }}' ]"
-  with_items: "{{ k8s_resource_files }}"
+- name: Merge and order configs
+  import_tasks: order_configs.yml
+  when: k8s_resource_files|length>0 or k8s_resource_dirs|length>0
 
 - name: Creating k8s objects
   k8s:
