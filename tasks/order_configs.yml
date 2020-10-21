@@ -13,10 +13,6 @@
 
 - name: set k8s_resources with set files
   set_fact:
-    k8s_resources: "{{ k8s_resources }} + [ '{{ item }}' ]"
+    k8s_resources: "{{ k8s_resources + [ item ] | k8s_filter }}"
   with_items: "{{ k8s_resource_files }}"
-
-- name: set k8s_resources with filter
-  set_fact:
-    k8s_resources: "{{ k8s_resources | k8s_filter }}"
 
