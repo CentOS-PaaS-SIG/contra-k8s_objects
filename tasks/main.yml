@@ -17,13 +17,17 @@
     k8s_auth_api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
   when: k8s_auth_results.k8s_auth is defined
 
+- name: "Find openshift server version"
+  shell: "oc version | grep openshift | awk '{print $2}' | cut -d'.' -f1"
+  register: oc_server_version
+
 - name: "Create openshift project {{ openshift_project }}"
   k8s:
     host: "{{ k8s_auth_host }}"
     api_key: "{{ k8s_auth_api_key }}"
     name: "{{ openshift_project }}"
     api_version: v1
-    kind: Project
+    kind: "{{ 'Project' if oc_server_version.stdout == 'v3' else 'ProjectRequest' }}"
     state: "{{ k8s_state }}"
     validate_certs: False
   register: result
