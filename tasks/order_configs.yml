@@ -8,11 +8,9 @@
 
 - name: set k8s_resources with found files
   set_fact:
-    k8s_resources: "{{ k8s_resources }} + [ '{{ item.path }}' ]"
+    k8s_resource_files: "{{ k8s_resource_files + [ item.path ] }}"
   with_items: "{{ oc_templates.files }}"
 
 - name: set k8s_resources with set files
   set_fact:
-    k8s_resources: "{{ k8s_resources + [ item ] | k8s_filter }}"
-  with_items: "{{ k8s_resource_files }}"
-
+    k8s_resources: "{{  k8s_resource_files | k8s_filter }}"
