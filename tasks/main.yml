@@ -13,6 +13,7 @@
   when: k8s_username != ""
 
 - name: set auth api key if username/password is provided
+  no_log: true
   set_fact:
     k8s_auth_api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
   when: k8s_auth_results.k8s_auth is defined
@@ -25,7 +26,6 @@
     kind: ProjectRequest
     state: "{{ k8s_state }}"
     validate_certs: False
-  no_log: true
   register: result
   until: result.failed == false
   delay: 5
@@ -44,6 +44,16 @@
     state: "{{ k8s_state }}"
     validate_certs: False
     definition: "{{ lookup('template', item) }}"
-  no_log: true
   with_items: "{{ k8s_resources }}"
+
+- name: Creating k8s secret objects
+  k8s:
+    host: "{{ k8s_auth_host }}"
+    api_key: "{{ k8s_auth_api_key }}"
+    namespace: "{{ openshift_project }}"
+    state: "{{ k8s_state }}"
+    validate_certs: False
+    definition: "{{ lookup('template', item) }}"
+  no_log: true
+  with_items: "{{ k8s_secret_resources }}"
 

@@ -16,3 +16,8 @@
     k8s_resources: "{{ k8s_resources + [ item ] | k8s_filter }}"
   with_items: "{{ k8s_resource_files }}"
 
+- name: set k8s_resource secrets with set files
+  set_fact:
+    k8s_secret_resources: "{{ k8s_resources + [ item ] | k8s_secrets_filter }}"
+  with_items: "{{ k8s_resource_files }}"
+
