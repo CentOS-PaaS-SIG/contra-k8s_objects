@@ -9,17 +9,10 @@ display = Display()
 
 def k8s_filter(k8s_objects):
     resource_files = []
-    resource_order = ['ServiceAccount', 'Group', 'RoleBinding', 'PersistentVolumeClaim', 'ImageStream', 'BuildConfig', 'DeploymentConfig']
+    resource_order = ['ServiceAccount', 'Group', 'RoleBinding', 'PersistentVolumeClaim', 'Secret', 'ImageStream', 'BuildConfig', 'DeploymentConfig']
     for res in resource_order:
         resource_files.extend([k8 for k8 in k8s_objects if selected_object(res, k8)])
-    resource_files.extend([k8 for k8 in k8s_objects if not selected_object('Secret', k8)])
-    return list(OrderedDict.fromkeys(resource_files))
-
-def k8s_secrets_filter(k8s_objects):
-    resource_files = []
-    resource_order = ['Secret']
-    for res in resource_order:
-        resource_files.extend([k8 for k8 in k8s_objects if selected_object(res, k8)])
+    resource_files.extend(k8s_objects)
     return list(OrderedDict.fromkeys(resource_files))
 
 def selected_object(selector, k8s_object):
@@ -47,7 +40,6 @@ def absolute_path(file_path):
 class FilterModule(object):
     def filters(self):
         return {
-            'k8s_filter': k8s_filter,
-            'k8s_secrets_filter': k8s_secrets_filter
+            'k8s_filter': k8s_filter
         }
 
