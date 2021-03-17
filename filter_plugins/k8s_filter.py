@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-from collections import OrderedDict
 from ansible.utils.display import Display
 from ansible import constants as C
 import os
@@ -8,12 +7,33 @@ import os
 display = Display()
 
 def k8s_filter(k8s_objects):
-    resource_files = []
-    resource_order = ['ServiceAccount', 'Group', 'RoleBinding', 'PersistentVolumeClaim', 'Secret', 'ImageStream', 'BuildConfig', 'DeploymentConfig']
+    resource_order = [
+        'ServiceAccount',
+        'Group',
+        'RoleBinding',
+        'PersistentVolumeClaim',
+        'Secret',
+        'ImageStream',
+        'BuildConfig',
+        'DeploymentConfig'
+    ]
+    no_log_true = ['Secret']
+
+    resource_files = {}
+    # order the resources according to what's in resource_order
     for res in resource_order:
-        resource_files.extend([k8 for k8 in k8s_objects if selected_object(res, k8)])
-    resource_files.extend(k8s_objects)
-    return list(OrderedDict.fromkeys(resource_files))
+        for k8s_res in k8s_objects:
+            if selected_object(res, k8s_res):
+                if res in no_log_true:
+                    resource_files[k8s_res] = True
+                else:
+                    resource_files[k8s_res] = False
+
+    # append objects that might have been missed to the end
+    for k8s_res in k8s_objects:
+        if k8s_res not in resource_files.keys():
+            resource_files[k8s_res] = False
+    return resource_files
 
 def selected_object(selector, k8s_object):
     playbook_dir = C.config.get_config_value("PLAYBOOK_DIR")
