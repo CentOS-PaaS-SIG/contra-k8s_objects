@@ -25,6 +25,7 @@
     kind: ProjectRequest
     state: "{{ k8s_state }}"
     validate_certs: False
+  no_log: true
   register: result
   until: result.failed == false
   delay: 5
@@ -43,6 +44,7 @@
     state: "{{ k8s_state }}"
     validate_certs: False
     definition: "{{ lookup('template', item.key) }}"
+  no_log: "{{ item.value }}"
   with_dict: "{{ k8s_resources }}"
   when: k8s_resources | type_debug == 'dict'
 
