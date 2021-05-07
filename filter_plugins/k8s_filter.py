@@ -8,11 +8,11 @@ display = Display()
 
 def k8s_filter(k8s_objects):
     resource_order = [
+        'Secret',
         'ServiceAccount',
         'Group',
         'RoleBinding',
         'PersistentVolumeClaim',
-        'Secret',
         'ImageStream',
         'BuildConfig',
         'DeploymentConfig'
