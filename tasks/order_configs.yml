@@ -10,9 +10,25 @@
   set_fact:
     k8s_res_files: "{{ k8s_resource_files + oc_templates.files | map(attribute='path') | list }}"
 
+- name: Filter only the secret resources
+  set_fact:
+    k8s_secret_files: "{{ k8s_res_files | select('search', 'secret') | list }}"
+
+- name: Filter out all secrets from k8s_resources
+  set_fact:
+    k8s_res_files: "{{ k8s_res_files | reject('search', 'secret') | list }}"
+
+- name: secret resource files to be applied
+  debug:
+    msg: "{{ k8s_secret_files }}"
+
 - name: resource files to be applied
   debug:
     msg: "{{ k8s_res_files }}"
+
+- name: set k8s_secrets with set files
+  set_fact:
+    k8s_secrets: "{{  k8s_secret_files | k8s_filter }}"
 
 - name: set k8s_resources with set files
   set_fact:
