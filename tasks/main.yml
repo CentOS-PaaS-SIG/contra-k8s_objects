@@ -59,10 +59,6 @@
   with_items: "{{ k8s_secrets }}"
   when: k8s_secrets | type_debug == 'list'
 
-- pause:
-    prompt: "Waiting 20 seconds for secrets to be set"
-    seconds: 20
-
 - name: Creating k8s objects
   k8s:
     host: "{{ k8s_auth_host }}"
