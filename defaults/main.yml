@@ -15,3 +15,4 @@ k8s_resources: []
 create_project: true
 
 run_prereqs: false
+global_no_log: true
