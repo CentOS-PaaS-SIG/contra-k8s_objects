@@ -29,7 +29,7 @@
   register: result
   until: result.status is defined and result.status.phase == 'Active'
   delay: 5
-  retries: 120
+  retries: 5
   when: create_project
 
 - name: Merge and order configs
