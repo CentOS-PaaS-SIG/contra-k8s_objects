@@ -17,6 +17,10 @@
     k8s_auth_api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
   when: k8s_auth_results.k8s_auth is defined
 
+- name: Pause for 30 seconds to wait for project creation
+  pause:
+    seconds: 30
+
 - name: "Create openshift project {{ openshift_project }}"
   k8s:
     host: "{{ k8s_auth_host }}"
@@ -25,9 +29,11 @@
     kind: ProjectRequest
     state: "{{ k8s_state }}"
     validate_certs: False
-    wait: True
   no_log: global_no_log
   register: result
+  until: result.failed == false
+  delay: 5
+  retries: 120
   when: create_project
 
 - name: Merge and order configs
