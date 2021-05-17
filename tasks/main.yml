@@ -27,7 +27,7 @@
     validate_certs: False
   no_log: global_no_log
   register: result
-  until: (result.failed is defined) and (result.keys()|length > 0) and result.failed == false
+  until: result.keys()|length > 0 and result.status.phase == 'Active'
   delay: 5
   retries: 120
   when: create_project
