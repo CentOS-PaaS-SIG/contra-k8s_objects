@@ -22,7 +22,7 @@
     host: "{{ k8s_auth_host }}"
     api_key: "{{ k8s_auth_api_key }}"
     name: "{{ openshift_project }}"
-    kind: Project
+    kind: ProjectRequest
     state: "{{ k8s_state }}"
     validate_certs: False
     wait: True
