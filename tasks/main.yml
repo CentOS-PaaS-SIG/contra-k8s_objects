@@ -17,16 +17,12 @@
     k8s_auth_api_key: "{{ k8s_auth_results.k8s_auth.api_key }}"
   when: k8s_auth_results.k8s_auth is defined
 
-- name: Pause for 30 seconds to wait for project creation
-  pause:
-    seconds: 30
-
 - name: "Create openshift project {{ openshift_project }}"
   k8s:
     host: "{{ k8s_auth_host }}"
     api_key: "{{ k8s_auth_api_key }}"
     name: "{{ openshift_project }}"
-    kind: ProjectRequest
+    kind: Namespace
     state: "{{ k8s_state }}"
     validate_certs: False
   no_log: global_no_log
