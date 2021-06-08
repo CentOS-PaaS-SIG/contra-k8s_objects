@@ -21,6 +21,10 @@
   pause:
     seconds: 30
 
+- name: print create_project
+  debug:
+    msg: "{{ create_project }}"
+
 - name: "Create openshift project {{ openshift_project }}"
   k8s:
     host: "{{ k8s_auth_host }}"
