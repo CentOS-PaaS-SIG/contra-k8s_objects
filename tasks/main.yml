@@ -34,7 +34,7 @@
   until: result.failed == false
   delay: 5
   retries: 120
-  when: "{{ create_project |bool }}"
+  when: create_project |bool
 
 - name: Merge and order configs
   import_tasks: order_configs.yml
