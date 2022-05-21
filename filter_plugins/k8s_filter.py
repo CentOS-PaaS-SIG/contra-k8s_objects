@@ -11,6 +11,7 @@ def k8s_filter(k8s_objects):
         'Secret',
         'ServiceAccount',
         'Group',
+        'Role',
         'RoleBinding',
         'PersistentVolumeClaim',
         'ImageStream',
