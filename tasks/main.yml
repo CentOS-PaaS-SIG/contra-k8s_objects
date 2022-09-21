@@ -29,12 +29,12 @@
     kind: ProjectRequest
     state: "{{ k8s_state }}"
     validate_certs: False
-  no_log: global_no_log
+  no_log: "{{ global_no_log |bool }}"
   register: result
   until: result.failed == false
   delay: 5
   retries: 120
-  when: create_project
+  when: create_project |bool
 
 - name: Merge and order configs
   import_tasks: order_configs.yml
@@ -48,7 +48,7 @@
     state: "{{ k8s_state }}"
     validate_certs: False
     definition: "{{ lookup('template', item.key) }}"
-  no_log: global_no_log
+  no_log: "{{ global_no_log |bool }}"
   with_dict: "{{ k8s_secrets }}"
   when: k8s_secrets | type_debug == 'dict'
 
@@ -60,7 +60,7 @@
     state: "{{ k8s_state }}"
     validate_certs: False
     definition: "{{ lookup('template', item) }}"
-  no_log: global_no_log
+  no_log: "{{ global_no_log |bool }}"
   with_items: "{{ k8s_secrets }}"
   when: k8s_secrets | type_debug == 'list'
 
