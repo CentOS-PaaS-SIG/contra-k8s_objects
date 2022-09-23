@@ -28,8 +28,8 @@
 
 - name: set k8s_secrets with set files
   set_fact:
-    k8s_secrets: "{{  k8s_secret_files | k8s_filter | list }}"
+    k8s_secrets: "{{  k8s_secret_files | k8s_filter }}"
 
 - name: set k8s_resources with set files
   set_fact:
-    k8s_resources: "{{  k8s_res_files | k8s_filter | list }}"
+    k8s_resources: "{{  k8s_res_files | k8s_filter }}"
