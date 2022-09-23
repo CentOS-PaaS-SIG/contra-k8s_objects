@@ -59,10 +59,10 @@
     namespace: "{{ openshift_project }}"
     state: "{{ k8s_state }}"
     validate_certs: False
-    definition: "{{ lookup('template', item.key) }}"
+    definition: "{{ lookup('template', item) }}"
   no_log: "{{ global_no_log |bool }}"
-  with_items: "{{ k8s_secrets.items() }}"
-  when: k8s_secrets is mapping
+  with_items: "{{ k8s_secrets | list }}"
+  when: k8s_secrets | type_debug == 'dict'
 
 - name: Creating k8s secret objects
   k8s:
