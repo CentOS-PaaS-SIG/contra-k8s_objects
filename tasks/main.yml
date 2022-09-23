@@ -50,7 +50,7 @@
     definition: "{{ lookup('template', item.key) }}"
   no_log: "{{ global_no_log |bool }}"
   with_items: "{{ k8s_secrets }}"
-  when: k8s_secrets | type_debug == 'OrderedDict'
+  when: k8s_secrets | type_debug == 'dict'
 
 - name: Creating k8s secret objects
   k8s:
