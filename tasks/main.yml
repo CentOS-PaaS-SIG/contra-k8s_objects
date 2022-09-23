@@ -40,6 +40,10 @@
   import_tasks: order_configs.yml
   when: k8s_resource_files|length>0 or k8s_resource_dirs|length>0
 
+- name: Type
+  debug:
+    msg: "{{ k8s_secrets | type_debug }}"
+
 - name: Creating k8s secret objects
   k8s:
     host: "{{ k8s_auth_host }}"
