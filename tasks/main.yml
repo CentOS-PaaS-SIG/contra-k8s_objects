@@ -54,7 +54,7 @@
     definition: "{{ lookup('template', item.key) }}"
   no_log: "{{ global_no_log |bool }}"
   with_items: "{{ k8s_secrets.items() }}"
-  when: k8s_secrets | type_debug == 'dict'
+  when: k8s_secrets is mapping
 
 - name: Creating k8s secret objects
   k8s:
