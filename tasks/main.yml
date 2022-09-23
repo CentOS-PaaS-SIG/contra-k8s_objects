@@ -44,6 +44,14 @@
   debug:
     msg: "{{ k8s_secrets | type_debug }}"
 
+- name: Type
+  debug:
+    msg: "{{ k8s_secrets is mapping }}"
+
+- name: Type
+  debug:
+    msg: "{{ k8s_secrets.items() is mapping }}"
+
 - name: Creating k8s secret objects
   k8s:
     host: "{{ k8s_auth_host }}"
