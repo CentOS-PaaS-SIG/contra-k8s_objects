@@ -2,6 +2,7 @@
 
 from ansible.utils.display import Display
 from ansible import constants as C
+from collections import OrderedDict
 import os
 
 display = Display()
@@ -20,7 +21,7 @@ def k8s_filter(k8s_objects):
     ]
     no_log_true = ['Secret']
 
-    resource_files = {}
+    resource_files = OrderedDict()
     # order the resources according to what's in resource_order
     for res in resource_order:
         for k8s_res in k8s_objects:
