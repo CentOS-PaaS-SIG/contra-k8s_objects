@@ -40,19 +40,7 @@
   import_tasks: order_configs.yml
   when: k8s_resource_files|length>0 or k8s_resource_dirs|length>0
 
-- name: Type
-  debug:
-    msg: "{{ k8s_secrets | type_debug }}"
-
-- name: Type
-  debug:
-    msg: "{{ k8s_secrets is mapping }}"
-
-- name: Type
-  debug:
-    msg: "{{ k8s_secrets.items() is mapping }}"
-
-- name: Creating k8s secret objects - greg 1
+- name: Creating k8s secret objects
   k8s:
     host: "{{ k8s_auth_host }}"
     api_key: "{{ k8s_auth_api_key }}"
@@ -76,7 +64,7 @@
   with_items: "{{ k8s_secrets }}"
   when: k8s_secrets | type_debug == 'list'
 
-- name: Creating k8s objects - greg 2
+- name: Creating k8s objects
   k8s:
     host: "{{ k8s_auth_host }}"
     api_key: "{{ k8s_auth_api_key }}"
