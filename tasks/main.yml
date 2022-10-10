@@ -47,9 +47,9 @@
     namespace: "{{ openshift_project }}"
     state: "{{ k8s_state }}"
     validate_certs: False
-    definition: "{{ lookup('template', item.key) }}"
+    definition: "{{ lookup('template', item) }}"
   no_log: "{{ global_no_log |bool }}"
-  with_dict: "{{ k8s_secrets }}"
+  with_items: "{{ k8s_secrets_ordered }}"
   when: k8s_secrets | type_debug == 'dict'
 
 - name: Creating k8s secret objects
@@ -71,8 +71,8 @@
     namespace: "{{ openshift_project }}"
     state: "{{ k8s_state }}"
     validate_certs: False
-    definition: "{{ lookup('template', item.key) }}"
-  with_dict: "{{ k8s_resources }}"
+    definition: "{{ lookup('template', item) }}"
+  with_items: "{{ k8s_resources_ordered }}"
   when: k8s_resources | type_debug == 'dict'
 
 - name: Creating k8s objects
